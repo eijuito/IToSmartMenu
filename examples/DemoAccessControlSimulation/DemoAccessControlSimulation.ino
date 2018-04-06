@@ -61,7 +61,7 @@
 #include <EEPROM.h>
 #include <avr/pgmspace.h>
 #include <avr/wdt.h>
-#include "IToSmartMenu.h"
+#include <IToSmartMenu.h>
 
 /**
  * **********************************  S M A R T   M E N U  ***************************************
