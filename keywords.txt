@@ -1,0 +1,20 @@
+
+IToSmartMenu	KEYWORD1
+
+itosm_item	KEYWORD2
+itosm_function	KEYWORD2
+itosm_node	KEYWORD2
+setEvent	KEYWORD2
+addOpenFunction	KEYWORD2
+addLoopFunction	KEYWORD2
+addExitFunction	KEYWORD2
+setItem	KEYWORD2
+setItemMessage	KEYWORD2
+setOnChangeFunction	KEYWORD2
+setOnTimeoutFunction	KEYWORD2
+onLoop	KEYWORD2
+printItem	KEYWORD2
+getText	KEYWORD2
+getTimeout	KEYWORD2
+getFlags	KEYWORD2
+getFlag	KEYWORD2
