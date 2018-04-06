@@ -101,7 +101,7 @@ class IToSmartMenu {
       ERROR_NULL  
     };
 
-    virtual IToSmartMenu(void); // constructor
+    IToSmartMenu(void); // constructor
     virtual ~IToSmartMenu(void); // destructor
     void version(char * textBuffer); // get the version of this library
 
