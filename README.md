@@ -65,11 +65,18 @@ int apagaLED() { // funcão chamada ao mover para o item 2
   return 0;
 }
 
+int nop() {}
+
 void setup() {
+  char aux[33];
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
   Serial.begin(115200);
   while(!Serial) {}
+  menu.version(aux);
+  Serial.println(aux);
+  menu.setOnChangeFunction(nop);
+  menu.setOnTimeoutFunction(nop);
 
   // define eventos para movimento automatico por timeout
   menu.setEvent(&item_0_0, menu.EVENT_TIMEOUT, &item_1_0);
@@ -78,14 +85,13 @@ void setup() {
   menu.setEvent(&item_1_0, menu.EVENT_TIMEOUT, &item_0_0);
   menu.addOpenFunction(&item_1_0, apagaLED);
 
-  menu.setItem(&item_0_0);
+  menu.setItem(&item_1_0);
 }
 
 void loop() {
   // chama as funções do menu para executar funcões durante o loop
   menu.onLoop(0);
 }
-
 
 ```
 
