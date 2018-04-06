@@ -39,7 +39,7 @@ Muito obrigado ao Rui Viana que tem me ensinado, dado dicas, sugestões, testou e
 #include <EEPROM.h>
 #include <avr/pgmspace.h>
 #include <avr/wdt.h>
-#include "IToSmartMenu.h"
+#include <IToSmartMenu.h>
 
 // construtor do menu
 IToSmartMenu menu;
