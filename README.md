@@ -73,9 +73,6 @@ Porém, esta biblioteca parece ter muitos problemas, principalmente ao utilizarmo
 
 Sintam-se a vontade para comentar nos informando como é sua experiencia com a biblioteca.
 
-O circuito abaixo, implementa o modo de expansão com 1 porta do Arduino
-[![teste de link](http://i.imgur.com/xDvFeTp.png)](http://www.labirito.com/projetos/itooutputmodule74595)
-
 ## License
 
 **Copyright (c) 2010 Labirito. All right reserved.**
