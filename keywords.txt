@@ -1,9 +1,15 @@
+#######################################
+# Syntax Coloring Map For Library
+#######################################
 
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
 IToSmartMenu	KEYWORD1
 
-itosm_item	KEYWORD2
-itosm_function	KEYWORD2
-itosm_node	KEYWORD2
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
 setEvent	KEYWORD2
 addOpenFunction	KEYWORD2
 addLoopFunction	KEYWORD2
@@ -18,3 +24,22 @@ getText	KEYWORD2
 getTimeout	KEYWORD2
 getFlags	KEYWORD2
 getFlag	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+#######################################
+# Structures (KEYWORD3)
+#######################################
+itosm_item	KEYWORD3
+itosm_function	KEYWORD3
+itosm_node	KEYWORD3
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+#######################################
+# Constants (LITERAL2)
+#######################################

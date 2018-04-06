@@ -1,6 +1,32 @@
 # ITo Smart Menu
 
+## Como funciona?
 Esta biblioteca implementa um "menu" inteligente cujos elementos chamamos de "item"
+
+### Um item contém:
+	#### Um ponteiro para texto para mostrar em display ou enviar para serial ou log
+	#### Um numero para redirecionamento automatico por timeout
+	#### Um conjunto de 8 flags (1 byte) para uso do programador
+	#### um ponteiro para um node o qual contera outros elementos
+
+Um node complementa o item tornando-o inteligente permitindo automatizar muitos processos economizando muito codigo do programador
+
+### Um node contém:
+	#### Um conjunto de ponteiro para item (um para cada evento) indicando o destino de redirecionamento
+		##### Estes eventos representam botoes acionados, tag RFID lida, Dados disponiveis, etc
+		Ao detectar algum destes eventos, o menu redireciona ao item indicado imediatamente
+	#### Um ponteiro para uma cadeia de funções a serem executados no inicialização do item
+		##### Serão executadas essas funções assim que o item se torna atual
+	#### Um ponteiro para uma cadeia de funções a serem executados durante a permanencia do item como atual
+		##### Serão executadas essas funções a cada ciclo do loop()
+	#### Um ponteiro para uma cadeia de funções a serem executados na finalização do item
+		##### Serão executadas essas funções assim que o item deixa de ser atual
+
+### Funções auxiliares
+	#### Função chamada ao alterar o item atual
+		Funciona igual a uma função da inicialização de item porém vale para todas as funções
+	#### Função chamada ao ocorrer timeout
+		Função chamada sempre que ocorrer um evento timeout
 
 Para mais informações, exemplos e dicas sobre esta biblioteca, por favor, nos visite no
 [Project Smart Menu @ labirito.com](http://www.labirito.com/projetos/ "Labirito projects")
