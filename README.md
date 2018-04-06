@@ -3,7 +3,7 @@
 Esta biblioteca implementa um "menu" inteligente cujos elementos chamamos de "item"
 
 Para mais informações, exemplos e dicas sobre esta biblioteca, por favor, nos visite no
-[Project ITo Output Module 74HC595 @ labirito.com](http://www.labirito.com/projetos/itooutputmodule74595 "Labirito projects")
+[Project Smart Menu @ labirito.com](http://www.labirito.com/projetos/ "Labirito projects")
 
 Muito obrigado ao Rui Viana que tem me ensinado, dado dicas, sugestões, testou e refinou esta biblioteca.
 
