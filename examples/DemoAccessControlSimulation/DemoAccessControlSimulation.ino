@@ -31,9 +31,9 @@
                       chain of flags indicating status
                     5 - Modulo de Rele
                       Simulado pelo LED do Arduino
-                    
-                      
-                    
+
+
+
    File version:    20160403
    Dependency:      Arduino.h                       // Base do Arduino
    MCU:             ATMEGA 328P 16 MHz / ATMEGA 2560 16 MHz
@@ -58,9 +58,7 @@
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-#include <EEPROM.h>
-#include <avr/pgmspace.h>
-#include <avr/wdt.h>
+#include <avr/pgmspace.h> // Essa biblioteca ja vem com a IDE
 #include <IToSmartMenu.h>
 
 /**
@@ -85,7 +83,7 @@ IToSmartMenu menu; // instancia o objeto menu
  * A primeira linha declara o string que será ligado ao item de menu
  * A segunda linha é o item de menu, recebendo o string
  * Note que estao com PROGMEM para economizar memoria RAM
- * Importante: siga exatamente os exemplos fornecidos 
+ * Importante: siga exatamente os exemplos fornecidos
  */
 IToSmartMenu_text text_0_0[] = "Menu HOME  v0.01                ";
 IToSmartMenu_item item_0_0 = {(char*)text_0_0, -1, MENU_FLAG_RFID_ENABLE | MENU_FLAG_RTC_MODO2, 0};
@@ -212,7 +210,7 @@ int executaSempreQueAlteraItem() {
 }
 
 int executaSempreQueOcorrerTimeout() {
-  Serial.println(F(" ⇒ KEY_TIMEOUT"));
+  Serial.println(F(" ? KEY_TIMEOUT"));
 }
 
 /**
@@ -234,7 +232,7 @@ void init_menus() {
   menu.setEvent(&item_0_0, menu.EVENT_RIGHT, &item_1_0); // tecla direita altera menu posterior
   // menu.setEvent(&item_0_0, menu.EVENT_TIMEOUT, &item_1_0); // timeout envia para menu inicial
   menu.addLoopFunction(&item_0_0, p_0_0_loop);
-    
+
   menu.setEvent(&item_1_0, menu.EVENT_LEFT, &item_0_0); // tecla esquerda altera menu anterior
   menu.setEvent(&item_1_0, menu.EVENT_RIGHT, &item_2_0); // tecla direita altera menu posterior
   menu.setEvent(&item_1_0, menu.EVENT_TIMEOUT, &item_0_0); // timeout envia para menu inicial
@@ -318,7 +316,6 @@ void loop() { // rotina que processa continuamente de maneira ciclica
   newCommand = menu.onLoop(key_status);
 
   delay(100);
-  wdt_reset(); // reinicia o Arduino se travar
 }
 //===========================================================================================
 void lerTeclas() {
@@ -329,32 +326,32 @@ void lerTeclas() {
   if (x == 54) { // tecla RIGHT sendo pressionada
     if(key_status != menu.EVENT_RIGHT) {
       key_status = menu.EVENT_RIGHT;
-      Serial.println(F(" ⇒ KEY_RIGHT"));
+      Serial.println(F(" ? KEY_RIGHT"));
       newCommand = 1;
     }
   } else if (x == 56) { // tecla UP sendo pressionada
     if(key_status != menu.EVENT_UP) {
       key_status = menu.EVENT_UP;
-      Serial.println(F(" ⇒ KEY_UP"));
+      Serial.println(F(" ? KEY_UP"));
       newCommand = 1;
     }
   } else if (x == 50) { // tecla DOWN sendo pressionada
     if(key_status != menu.EVENT_DOWN) {
       key_status = menu.EVENT_DOWN;
-      Serial.println(F(" ⇒ KEY_DOWN"));
+      Serial.println(F(" ? KEY_DOWN"));
       newCommand = 1;
     }
   } else if (x == 52) { // tecla LEFT sendo pressionada
     if(key_status != menu.EVENT_LEFT) {
       key_status = menu.EVENT_LEFT;
-      Serial.println(F(" ⇒ KEY_LEFT"));
+      Serial.println(F(" ? KEY_LEFT"));
       newCommand = 1;
     }
   }
   else if (x == 53) { // tecla SELECT sendo pressionada
     if(key_status != menu.EVENT_ENTER) {
       key_status = menu.EVENT_ENTER;
-      Serial.println(F(" ⇒ KEY_ENTER"));
+      Serial.println(F(" ? KEY_ENTER"));
       newCommand = 1;
     }
   } else if(x == -1) { // nenhuma tecla pressionada
@@ -406,7 +403,7 @@ void LCD_mostrar() {
 
 void LCD_write(uint8_t coluna, uint8_t linha, char * texto) {
   uint8_t pos = coluna + linha * 16;
-  for(uint8_t i = pos; i < 32; i++) {   
+  for(uint8_t i = pos; i < 32; i++) {
     if(i - pos < strlen(texto)) LCD_buffer[i] = texto[i - pos];
   }
   Serial.print(F("\n/|"));
