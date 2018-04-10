@@ -1,29 +1,13 @@
-/*
-  Nome do Aquivo:   IToSmartMenu.cpp Library
-  Descrição:        Library to create menu by dynamic elements linked with chain of function nodes
-                    The menu starts with a root element
-                    Create menu elements and link to root
-                    Menu elements have:
-                      char array to display the menu option like LCD, Serial, etc
-                      chain of links to automatic select next menu element
-                      chain of functions to execute on item open() event
-                      chain of functions to execute on item loop() event
-                      chain of functions to execute on item exit() event
-                      
-                    
-                      Lista de lista de links encadeados apontando o sub menu
-                    A biblioteca inicia com o nó raiz
-                    Depois é chamada funções que criará os nós
-                    Assim, cada nó será adicionado  como link de outro nó
-                      
-                    
-   File version:    20160403
-   Dependency:      Arduino.h                       // Base do Arduino
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   See IToSmartMenu-YYYYMMDDa.h to see more details
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
+/**
+ * Nome do Aquivo:   IToSmartMenu.cpp Library
+ * Descrição:        See IToSmartMenu.h
+ * 
+ * File version:    20160403
+ * Dependency:      Arduino.h                       // Base do Arduino
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * See IToSmartMenu-YYYYMMDDa.h to see more details
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
 #include <Arduino.h>
 #include "IToSmartMenu.h"
 
@@ -75,22 +59,16 @@ int IToSmartMenu::addExitFunction(struct itosm_item *itemTarget, int (*newFuncti
 }
 
 int IToSmartMenu::setItem(struct itosm_item *nextItem) {
-  if(nextItem == NULL) return ERROR_NULL;
-  if(_currentItem != NULL) executeFunctionChain((uint16_t)_currentItem->node->fOnExit);
-  _currentItem = nextItem; // point to new item
-  _currentTimer = millis();
-  _onChangeFunction();
-  executeFunctionChain((uint16_t)_currentItem->node->fOnOpen);
-  return ERROR_NA;
+  return setItemMessage(nextItem, NULL);
 }
 
 int IToSmartMenu::setItemMessage(struct itosm_item *nextItem, struct itosm_item *itemOfTheEvent) {
   if(nextItem == NULL) return ERROR_NULL;
   if(_currentItem != NULL) executeFunctionChain((uint16_t)_currentItem->node->fOnExit);
   _currentItem = nextItem; // point to new item
-  setEvent(nextItem, EVENT_TIMEOUT, itemOfTheEvent);
+  if(itemOfTheEvent) setEvent(nextItem, EVENT_TIMEOUT, itemOfTheEvent);
   _currentTimer = millis();
-  _onChangeFunction();
+  if(_onChangeFunction) _onChangeFunction();
   executeFunctionChain((uint16_t)_currentItem->node->fOnOpen);
   return ERROR_NA;
 }
@@ -111,7 +89,7 @@ int IToSmartMenu::onLoop(int event) {
     if((getTimeout() > -1) // if timeout is active
         && (_currentItem->node->events[EVENT_TIMEOUT] != NULL) // there is valid pointer for timeout event
         && ((millis() - _currentTimer) > getTimeout())) { // and time has expired
-      _onTimeoutFunction(); // executa a funcao registrada para timeouts
+      if(_onTimeoutFunction) _onTimeoutFunction(); // executa a funcao registrada para timeouts
       setItem(_currentItem->node->events[EVENT_TIMEOUT]); // alterna para o item de menu conforme o evento
     }
   }
@@ -150,8 +128,8 @@ void IToSmartMenu::printItem(struct itosm_item *item) {
 
   Serial.print(F("....EVENT_TIMEOUT:"));
   Serial.print((uint16_t) item->node->events[EVENT_TIMEOUT]);
-  Serial.print(F(" EVENT_NEWEVENT:"));
-  Serial.print((uint16_t) item->node->events[EVENT_NEWEVENT]);
+  Serial.print(F(" EVENT_RETURN:"));
+  Serial.print((uint16_t) item->node->events[EVENT_RETURN]);
   Serial.print(F(" EVENT_ENTER:"));
   Serial.print((uint16_t) item->node->events[EVENT_ENTER]);
   Serial.print(F(" EVENT_UP:"));
@@ -162,8 +140,8 @@ void IToSmartMenu::printItem(struct itosm_item *item) {
   Serial.print((uint16_t) item->node->events[EVENT_LEFT]);
   Serial.print(F(" EVENT_RIGHT:"));
   Serial.print((uint16_t) item->node->events[EVENT_RIGHT]);
-  Serial.print(F(" EVENT_NEXTSTEP:"));
-  Serial.println((uint16_t) item->node->events[EVENT_NEXTSTEP]);
+  Serial.print(F(" EVENT_NEXT:"));
+  Serial.println((uint16_t) item->node->events[EVENT_NEXT]);
   return;
 }
 

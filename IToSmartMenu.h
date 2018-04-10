@@ -55,6 +55,28 @@
 #define IToSmartMenu_item struct itosm_item
 
 IToSmartMenu_text ITOSMARTMENU_VERSION[] = "IToSmartMenu v0.12";
+// ######### Estrutura de nós com ponteiro para função
+typedef struct itosm_item { // sizeof this class = 2 + 2 + 1 + 2
+  char *text; // Texto do menu
+  int timeout; // Time in seconds to trigger EVENT_TIMEOUT event. Default = -1
+  uint8_t flags; // Ativa ou desativa flags de uso do programador
+  struct itosm_node *node;
+};
+
+typedef struct itosm_function {
+  uint16_t (*function)(void); // pointer to custom defined function
+  struct itosm_function *next; // pointer to next itosm_function. Defaul = NULL (no next function)
+};
+
+typedef struct itosm_node { // sizeof this class = 8*2 + 2 + 2 + 2
+  const struct itosm_item *events[ITOSMARTMENU_QTD_EVENTS]; // Array of itosm_item address for each itosm_event. Defaul = NULL
+  struct itosm_function *fOnOpen; // execute function chain on start the node
+  struct itosm_function *fOnLoop; // execute function chain every loop cycle
+  struct itosm_function *fOnExit; // execute function chain on finish the node
+};
+
+class IToSmartMenu {
+  public:
 /**
  * Para facilitar o uso do menu, declaramos o seguinte enum
  * que servirá para selecionar qual item da lista de "Proximo item de menu" sera direcionado
@@ -62,43 +84,21 @@ IToSmartMenu_text ITOSMARTMENU_VERSION[] = "IToSmartMenu v0.12";
  * Lembrando que o programa roda durante o loop(), portanto comandos sao lidos e executados ciclicamente
  * os nomes podem ser alterados para falicitar memorizar os comandos
  */
-// ######### Estrutura de nós com ponteiro para função
-typedef struct itosm_item { // sizeof this class = 2 + 2 + 1 + 2
-  char *text; // Texto do menu
-  int timeout; // Passa para o proximo passo automaticamente depois de timeout segundos. Default = -1
-  uint8_t flags; // Ativa ou desativa flags de uso do programador
-  struct itosm_node *node;
-};
-
-typedef struct itosm_function {
-  uint16_t (*function)(void); // pointer to function
-  struct itosm_function *next;
-};
-
-typedef struct itosm_node { // sizeof this class = 8*2 + 2 + 2 + 2
-  const struct itosm_item *events[ITOSMARTMENU_QTD_EVENTS]; // Navega cadeia de itosm_node de acordo com itosm_event apontando pro itosm_node destino. Defaul = NULL
-  struct itosm_function *fOnOpen; // executa ao entrar no nó. Desabilita com nop
-  struct itosm_function *fOnLoop; // executa a cada vez que passa pelo loop
-  struct itosm_function *fOnExit; // executa ao entrar no nó. Desabilita com nop
-};
-
-class IToSmartMenu {
-  public:
     enum itosm_event {
-      EVENT_IDLE = -1, // Representa a acao nula durante o loop
-      EVENT_TIMEOUT, // Comando ou tecla pressionada indicando tempo expirado
-      EVENT_NEWEVENT, // Comando indicando novo evento para processar
-      EVENT_ENTER, // Comando ou tecla Enter ou Ok pressionada
-      EVENT_UP, // Comando ou tecla indicando para cima ou incremento
-      EVENT_DOWN, // Comando ou tecla indicando para baixo ou decremento
-      EVENT_LEFT, // Comando ou tecla indicando esquerda ou retornar
-      EVENT_RIGHT, // Comando ou tecla indicando direita ou entrar
-      EVENT_NEXTSTEP, // Comando automatico de destino padrao
+      EVENT_IDLE = -1, // No events are detected
+      EVENT_TIMEOUT,   // Timeout event detected (trigered according itosm_item.timeout value)
+      EVENT_RETURN,    // Event or RETURN command detected
+      EVENT_ENTER,     // Event or ENTER command detected
+      EVENT_UP,        // Event or UP command detected
+      EVENT_DOWN,      // Event or DOWN command detected
+      EVENT_LEFT,      // Event or LEFT command detected
+      EVENT_RIGHT,     // Event or RIGHT command detected
+      EVENT_NEXT  // Event or NEXT command detected
     };
     enum itosm_error {
-      ERROR_NA = 0,
-      ERROR_EMPTY,
-      ERROR_NULL  
+      ERROR_NA = 0, // NO ERROR
+      ERROR_EMPTY,  // Error caused by empty variable
+      ERROR_NULL    // Error caused by NULL found
     };
 
     IToSmartMenu(void); // constructor
