@@ -8,7 +8,7 @@
                     4 - Evento 4, devido ao evento KEY_TIMEOUT de 5 segundos = item do menu "LED 3 aceso"
                     o evento KEY_TIMEOUT de 5 segundos leva ao estado 2.
                     Os estados 2, 3 e 4 também aceitam o botão KEY_ENTER a qualquer momento para levar ao estado 1
-                    
+
    File version:    20180406
    Dependency:      Arduino.h                       // Base do Arduino
    MCU:             ATMEGA 328P 16 MHz / ATMEGA 2560 16 MHz
@@ -33,7 +33,6 @@
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-#include <avr/pgmspace.h>
 #include "IToSmartMenu.h"
 
 #define LED1 7
@@ -60,7 +59,7 @@ IToSmartMenu menu; // instancia o objeto menu
  * A primeira linha declara o string que será ligado ao item de menu
  * A segunda linha é o item de menu, recebendo o string
  * Note que estao com PROGMEM para economizar memoria RAM
- * Importante: siga exatamente os exemplos fornecidos 
+ * Importante: siga exatamente os exemplos fornecidos
  */
  // temos 1 item para cada estado
 IToSmartMenu_text text_home[] = "HOME";
@@ -80,39 +79,33 @@ int key_status = menu.EVENT_IDLE; // Inicializa valor do estado das teclas
  * Elas devem ser declaradas antes da funcao que inicializa o menu pois essas
  * funcoes sao usadas
  */
-int home_open() {
+void home_open() {
   digitalWrite(LED1, LOW);
   digitalWrite(LED2, LOW);
   digitalWrite(LED3, LOW);
   Serial.println(F("HOME"));
-  return -1;
 }
 
-int led1_open() {
+void led1_open() {
   digitalWrite(LED1, HIGH);
   digitalWrite(LED2, LOW);
   digitalWrite(LED3, LOW);
   Serial.println(F("LED 1 aceso"));
-  return -1;
 }
 
-int led2_open() {
+void led2_open() {
   digitalWrite(LED1, LOW);
   digitalWrite(LED2, HIGH);
   digitalWrite(LED3, LOW);
   Serial.println(F("LED 2 aceso"));
-  return -1;
 }
 
-int led3_open() {
+void led3_open() {
   digitalWrite(LED1, LOW);
   digitalWrite(LED2, LOW);
   digitalWrite(LED3, HIGH);
   Serial.println(F("LED 3 aceso"));
-  return -1;
 }
-
-int nop() {}
 
 /**
  *  Funcoes do menu
@@ -131,13 +124,11 @@ void init_menus() {
   menu.setEvent(&item_led1, menu.EVENT_ENTER, &item_home); // tecla enter envia para o estado inicial
   menu.setEvent(&item_led2, menu.EVENT_ENTER, &item_home); // tecla enter envia para o estado inicial
   menu.setEvent(&item_led3, menu.EVENT_ENTER, &item_home); // tecla enter envia para o estado inicial
-  
+
   menu.addOpenFunction(&item_home, home_open); // anexa a funcao que apaga os leds ao item home do menu
   menu.addOpenFunction(&item_led1, led1_open); // anexa a funcao que acende somente o led 1 ao item led1 do menu
   menu.addOpenFunction(&item_led2, led2_open); // anexa a funcao que acende somente o led 2 ao item led2 do menu
   menu.addOpenFunction(&item_led3, led3_open); // anexa a funcao que acende somente o led 3 ao item led3 do menu
-
-  return;
 }
 
 void setup() {
@@ -150,8 +141,6 @@ void setup() {
   while(!Serial) {}
   menu.version(charBuffer);
   Serial.println(charBuffer);
-  menu.setOnChangeFunction(nop);
-  menu.setOnTimeoutFunction(nop);
 
   init_menus();
   // define item do menu inicial
@@ -165,7 +154,5 @@ void loop() { // rotina que processa continuamente de maneira ciclica
   // Esta funcao deve ser posta no loop() para executar as funcoes onLoop() dos itens
   // e a funcao anexada atraves do
   menu.onLoop(menu.EVENT_IDLE);
-
-  delay(100);
 }
 
