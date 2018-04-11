@@ -1,4 +1,3 @@
-#include <avr/pgmspace.h>
 #include "IToSmartMenu.h"
 
 char aux[33];
@@ -19,18 +18,16 @@ IToSmartMenu_item item_1_0 = {(char*)text_1_0, // link para o texto
                                          0x01, // Flags não são usados neste exemplo
                                            0}; // Sempre zero
 
-int acendeLED() { // funcão chamada ao mover para o item 1
+void acendeLED() { // funcão chamada ao mover para o item 1
   digitalWrite(LED_BUILTIN, HIGH);
   menu.getText(aux);
   Serial.println(aux);
-  return 0;
 }
 
-int apagaLED() { // funcão chamada ao mover para o item 2
+void apagaLED() { // funcão chamada ao mover para o item 2
   digitalWrite(LED_BUILTIN, LOW);
   menu.getText(aux);
   Serial.println(aux);
-  return 0;
 }
 
 void setup() {
