@@ -35,10 +35,17 @@
 
 #include "IToSmartMenu.h"
 
+#if (defined(__AVR__))
 #define LED1 7
 #define LED2 6
 #define LED3 5
 #define BOTAO 8
+#else
+#define LED1 14
+#define LED2 16
+#define LED3 5
+#define BOTAO 12
+#endif
 
 /**
  * **********************************  S M A R T   M E N U  ***************************************
@@ -134,8 +141,8 @@ void init_menus() {
 void setup() {
   char charBuffer[64]; // buffer de uso geral
   pinMode(LED1, OUTPUT);
-  pinMode(LED1, OUTPUT);
-  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+  pinMode(LED3, OUTPUT);
   pinMode(BOTAO, INPUT_PULLUP);
   Serial.begin(115200);
   while(!Serial) {}
@@ -155,4 +162,3 @@ void loop() { // rotina que processa continuamente de maneira ciclica
   // e a funcao anexada atraves do
   menu.onLoop(menu.EVENT_IDLE);
 }
-
