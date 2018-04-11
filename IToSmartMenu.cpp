@@ -33,29 +33,27 @@ void IToSmartMenu::version(char * textBuffer) {
   textBuffer[i] = '\0';
 }
 
-int IToSmartMenu::setEvent(struct itosm_item *itemTarget, int event, struct itosm_item* itemOfTheEvent) {
-  int ret = -1;
-  if(itemOfTheEvent == NULL) return ret;
-  if(itemTarget == NULL) return ret;
+void IToSmartMenu::setEvent(struct itosm_item *itemTarget, int event, struct itosm_item* itemOfTheEvent) {
+  if(itemOfTheEvent == NULL) return;
+  if(itemTarget == NULL) return;
   if(itemTarget->node == NULL) newNode(itemTarget);
   itemTarget->node->events[event] = itemOfTheEvent;
-  return ret;
 }
 
-int IToSmartMenu::addOpenFunction(struct itosm_item *itemTarget, int (*newFunction)()) {
-  if(itemTarget == NULL) return -1;
+void IToSmartMenu::addOpenFunction(struct itosm_item *itemTarget,  void (*newFunction)()) {
+  if(itemTarget == NULL) return;
   if(itemTarget->node == NULL) newNode(itemTarget);
-  return addFunction(&itemTarget->node->fOnOpen, newFunction);
+  addFunction(&itemTarget->node->fOnOpen, newFunction);
 }
 
-int IToSmartMenu::addLoopFunction(struct itosm_item *itemTarget, int (*newFunction)()) {
-  if(itemTarget == NULL) return -1;
-  return addFunction(&itemTarget->node->fOnLoop, newFunction);
+void IToSmartMenu::addLoopFunction(struct itosm_item *itemTarget, void (*newFunction)()) {
+  if(itemTarget == NULL) return;
+  addFunction(&itemTarget->node->fOnLoop, newFunction);
 }
 
-int IToSmartMenu::addExitFunction(struct itosm_item *itemTarget, int (*newFunction)()) {
-  if(itemTarget == NULL) return -1;
-  return addFunction(&itemTarget->node->fOnExit, newFunction);
+void IToSmartMenu::addExitFunction(struct itosm_item *itemTarget, void (*newFunction)()) {
+  if(itemTarget == NULL) return;
+  addFunction(&itemTarget->node->fOnExit, newFunction);
 }
 
 int IToSmartMenu::setItem(struct itosm_item *nextItem) {
@@ -64,24 +62,26 @@ int IToSmartMenu::setItem(struct itosm_item *nextItem) {
 
 int IToSmartMenu::setItemMessage(struct itosm_item *nextItem, struct itosm_item *itemOfTheEvent) {
   if(nextItem == NULL) return ERROR_NULL;
-  if(_currentItem != NULL) executeFunctionChain((uint16_t)_currentItem->node->fOnExit);
+//  if(_currentItem != NULL) executeFunctionChain((uint16_t)_currentItem->node->fOnExit);
+  if(_currentItem != NULL) executeFunctionChain(_currentItem->node->fOnExit);
   _currentItem = nextItem; // point to new item
   if(itemOfTheEvent) setEvent(nextItem, EVENT_TIMEOUT, itemOfTheEvent);
   _currentTimer = millis();
   if(_onChangeFunction) _onChangeFunction();
-  executeFunctionChain((uint16_t)_currentItem->node->fOnOpen);
+//  executeFunctionChain((uint16_t)_currentItem->node->fOnOpen);
+  executeFunctionChain(_currentItem->node->fOnOpen);
   return ERROR_NA;
 }
 
-int IToSmartMenu::setOnChangeFunction(int (*newFunction)()) {
+void IToSmartMenu::setOnChangeFunction(void (*newFunction)()) {
   _onChangeFunction = newFunction;
 }
 
-int IToSmartMenu::setOnTimeoutFunction(int (*newFunction)()) {
+void IToSmartMenu::setOnTimeoutFunction(void (*newFunction)()) {
   _onTimeoutFunction = newFunction;
 }
 
-int IToSmartMenu::onLoop(int event) {
+void IToSmartMenu::onLoop(int event) {
   if(event > 0) {
     if(_currentItem->node->events[event] > 0)
       setItem(_currentItem->node->events[event]);
@@ -93,8 +93,8 @@ int IToSmartMenu::onLoop(int event) {
       setItem(_currentItem->node->events[EVENT_TIMEOUT]); // alterna para o item de menu conforme o evento
     }
   }
-  executeFunctionChain((uint16_t)_currentItem->node->fOnLoop); // executa a cadeia de funcoes on loop do item do menu corrente
-  return 0;
+//  executeFunctionChain((uint16_t)_currentItem->node->fOnLoop); // executa a cadeia de funcoes on loop do item do menu corrente
+  executeFunctionChain(_currentItem->node->fOnLoop); // executa a cadeia de funcoes on loop do item do menu corrente
 }
 
 void IToSmartMenu::printItem(struct itosm_item *item) {
@@ -102,7 +102,8 @@ void IToSmartMenu::printItem(struct itosm_item *item) {
   char charBuffer[64];
   if(item == NULL) item = _currentItem;
   Serial.print(F("##PrintItem=> "));
-  Serial.print((uint16_t) item);
+//  Serial.print((uint16_t) item);
+  Serial.print((unsigned int) item);
   if(item == NULL) {
     Serial.println("");
     return;
@@ -117,31 +118,41 @@ void IToSmartMenu::printItem(struct itosm_item *item) {
   Serial.print(F(" flags:"));
   Serial.print(item->flags);
   Serial.print(F(" node:"));
-  Serial.println((uint16_t) item->node);
+  Serial.println((unsigned int) item->node);
   if(item->node == NULL) return;
   Serial.print(F("....fOnOpen:"));
-  Serial.print((uint16_t) item->node->fOnOpen);
+//  Serial.print((uint16_t) item->node->fOnOpen);
+  Serial.print((unsigned int) item->node->fOnOpen);
   Serial.print(F(" fOnLoop:"));
-  Serial.print((uint16_t) item->node->fOnLoop);
+//  Serial.print((uint16_t) item->node->fOnLoop);
+  Serial.print((unsigned int) item->node->fOnLoop);
   Serial.print(F(" fOnExit:"));
-  Serial.println((uint16_t) item->node->fOnExit);
-
+//  Serial.println((uint16_t) item->node->fOnExit);
+  Serial.println((unsigned int) item->node->fOnExit);
   Serial.print(F("....EVENT_TIMEOUT:"));
-  Serial.print((uint16_t) item->node->events[EVENT_TIMEOUT]);
+//  Serial.print((uint16_t) item->node->events[EVENT_TIMEOUT]);
+  Serial.print((unsigned int) item->node->events[EVENT_TIMEOUT]);
   Serial.print(F(" EVENT_RETURN:"));
-  Serial.print((uint16_t) item->node->events[EVENT_RETURN]);
+//  Serial.print((uint16_t) item->node->events[EVENT_RETURN]);
+  Serial.print((unsigned int) item->node->events[EVENT_RETURN]);
   Serial.print(F(" EVENT_ENTER:"));
-  Serial.print((uint16_t) item->node->events[EVENT_ENTER]);
+//  Serial.print((uint16_t) item->node->events[EVENT_ENTER]);
+  Serial.print((unsigned int) item->node->events[EVENT_ENTER]);
   Serial.print(F(" EVENT_UP:"));
-  Serial.println((uint16_t) item->node->events[EVENT_UP]);
+//  Serial.println((uint16_t) item->node->events[EVENT_UP]);
+  Serial.println((unsigned int) item->node->events[EVENT_UP]);
   Serial.print(F("....EVENT_DOWN:"));
-  Serial.print((uint16_t) item->node->events[EVENT_DOWN]);
+//  Serial.print((uint16_t) item->node->events[EVENT_DOWN]);
+  Serial.print((unsigned int) item->node->events[EVENT_DOWN]);
   Serial.print(F(" EVENT_LEFT:"));
-  Serial.print((uint16_t) item->node->events[EVENT_LEFT]);
+//  Serial.print((uint16_t) item->node->events[EVENT_LEFT]);
+  Serial.print((unsigned int) item->node->events[EVENT_LEFT]);
   Serial.print(F(" EVENT_RIGHT:"));
-  Serial.print((uint16_t) item->node->events[EVENT_RIGHT]);
+//  Serial.print((uint16_t) item->node->events[EVENT_RIGHT]);
+  Serial.print((unsigned int) item->node->events[EVENT_RIGHT]);
   Serial.print(F(" EVENT_NEXT:"));
-  Serial.println((uint16_t) item->node->events[EVENT_NEXT]);
+//  Serial.println((uint16_t) item->node->events[EVENT_NEXT]);
+  Serial.println((unsigned int) item->node->events[EVENT_NEXT]);
   return;
 }
 
@@ -183,16 +194,14 @@ void IToSmartMenu::newNode(struct itosm_item *itemTarget) {
     itemTarget->node->fOnExit = NULL;
 }
 
-int IToSmartMenu::addFunction(struct itosm_function **nodeFunction, int (*newFunction)()) {
-  int ret = -1;
-  if(newFunction == NULL) return ret;
+void IToSmartMenu::addFunction(struct itosm_function **nodeFunction, void (*newFunction)()) {
+  if(newFunction == NULL) return;
   while(*nodeFunction != NULL) {
     nodeFunction = &(*nodeFunction)->next;
   }
   *nodeFunction = (struct itosm_function *)malloc(sizeof(struct itosm_function)); // alloc memory of function node
   (*nodeFunction)->function = newFunction;
   (*nodeFunction)->next = NULL;
-  return ret;
 }
 
 void IToSmartMenu::executeFunctionChain(struct itosm_function *functionChain) {

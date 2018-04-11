@@ -64,12 +64,12 @@ typedef struct itosm_item { // sizeof this class = 2 + 2 + 1 + 2
 };
 
 typedef struct itosm_function {
-  uint16_t (*function)(void); // pointer to custom defined function
+  void (*function)(void); // pointer to custom defined function
   struct itosm_function *next; // pointer to next itosm_function. Defaul = NULL (no next function)
 };
 
 typedef struct itosm_node { // sizeof this class = 8*2 + 2 + 2 + 2
-  const struct itosm_item *events[ITOSMARTMENU_QTD_EVENTS]; // Array of itosm_item address for each itosm_event. Defaul = NULL
+  struct itosm_item *events[ITOSMARTMENU_QTD_EVENTS]; // Array of itosm_item address for each itosm_event. Defaul = NULL
   struct itosm_function *fOnOpen; // execute function chain on start the node
   struct itosm_function *fOnLoop; // execute function chain every loop cycle
   struct itosm_function *fOnExit; // execute function chain on finish the node
@@ -105,16 +105,16 @@ class IToSmartMenu {
     virtual ~IToSmartMenu(void); // destructor
     void version(char * textBuffer); // get the version of this library
 
-    int setEvent(struct itosm_item *itemTarget, int event, struct itosm_item *itemOfTheEvent);
-    int addOpenFunction(struct itosm_item *itemTarget, int (*newFunction)());
-    int addLoopFunction(struct itosm_item *itemTarget, int (*newFunction)());
-    int addExitFunction(struct itosm_item *itemTarget, int (*newFunction)());
+    void setEvent(struct itosm_item *itemTarget, int event, struct itosm_item *itemOfTheEvent);
+    void addOpenFunction(struct itosm_item *itemTarget, void (*newFunction)());
+    void addLoopFunction(struct itosm_item *itemTarget, void (*newFunction)());
+    void addExitFunction(struct itosm_item *itemTarget, void (*newFunction)());
 
     int setItem(struct itosm_item *nextItem);
     int setItemMessage(struct itosm_item *nextItem, struct itosm_item *itemOfTheEvent);
-    int setOnChangeFunction(int (*newFunction)());
-    int setOnTimeoutFunction(int (*newFunction)());
-    int onLoop(int event); // execute every loop() cycle
+    void setOnChangeFunction(void (*newFunction)());
+    void setOnTimeoutFunction(void (*newFunction)());
+    void onLoop(int event); // execute every loop() cycle
     void printItem(struct itosm_item *nextItem);
     
     uint8_t getText(char * textBuffer); // copy text from current node to textBuffer and returns the length
@@ -124,13 +124,13 @@ class IToSmartMenu {
 
   private:
     void newNode(struct itosm_item *itemTarget);
-    int addFunction(struct itosm_function **nodeFunction, int (*newFunction)());
+    void addFunction(struct itosm_function **nodeFunction, void (*newFunction)());
     void executeFunctionChain(struct itosm_function *functionChain);
 
     struct itosm_item* _currentItem;
     long _currentTimer;
-    uint16_t (*_onChangeFunction)(void); // pointer to function
-    uint16_t (*_onTimeoutFunction)(void); // pointer to function
+    void (*_onChangeFunction)(void); // pointer to function
+    void (*_onTimeoutFunction)(void); // pointer to function
 
 }; // class IToSmartMenu
 
