@@ -3,7 +3,7 @@
 ## Como funciona?
 Esta biblioteca implementa um "menu" inteligente cujos elementos chamamos de "item"
 
-### Um item contém:
+### Um item contÃ©m:
 	#### Um ponteiro para texto para mostrar em display ou enviar para serial ou log
 	#### Um numero para redirecionamento automatico por timeout
 	#### Um conjunto de 8 flags (1 byte) para uso do programador
@@ -11,27 +11,27 @@ Esta biblioteca implementa um "menu" inteligente cujos elementos chamamos de "it
 
 Um node complementa o item tornando-o inteligente permitindo automatizar muitos processos economizando muito codigo do programador
 
-### Um node contém:
+### Um node contÃ©m:
 	#### Um conjunto de ponteiro para item (um para cada evento) indicando o destino de redirecionamento
 		##### Estes eventos representam botoes acionados, tag RFID lida, Dados disponiveis, etc
 		Ao detectar algum destes eventos, o menu redireciona ao item indicado imediatamente
-	#### Um ponteiro para uma cadeia de funções a serem executados no inicialização do item
-		##### Serão executadas essas funções assim que o item se torna atual
-	#### Um ponteiro para uma cadeia de funções a serem executados durante a permanencia do item como atual
-		##### Serão executadas essas funções a cada ciclo do loop()
-	#### Um ponteiro para uma cadeia de funções a serem executados na finalização do item
-		##### Serão executadas essas funções assim que o item deixa de ser atual
+	#### Um ponteiro para uma cadeia de funÃ§Ãµes a serem executados no inicializaÃ§Ã£o do item
+		##### SerÃ£o executadas essas funÃ§Ãµes assim que o item se torna atual
+	#### Um ponteiro para uma cadeia de funÃ§Ãµes a serem executados durante a permanencia do item como atual
+		##### SerÃ£o executadas essas funÃ§Ãµes a cada ciclo do loop()
+	#### Um ponteiro para uma cadeia de funÃ§Ãµes a serem executados na finalizaÃ§Ã£o do item
+		##### SerÃ£o executadas essas funÃ§Ãµes assim que o item deixa de ser atual
 
-### Funções auxiliares
-	#### Função chamada ao alterar o item atual
-		Funciona igual a uma função da inicialização de item porém vale para todas as funções
-	#### Função chamada ao ocorrer timeout
-		Função chamada sempre que ocorrer um evento timeout
+### FunÃ§Ãµes auxiliares
+	#### FunÃ§Ã£o chamada ao alterar o item atual
+		Funciona igual a uma funÃ§Ã£o da inicializaÃ§Ã£o de item porÃ©m vale para todas as funÃ§Ãµes
+	#### FunÃ§Ã£o chamada ao ocorrer timeout
+		FunÃ§Ã£o chamada sempre que ocorrer um evento timeout
 
-Para mais informações, exemplos e dicas sobre esta biblioteca, por favor, nos visite no
-[Project Smart Menu @ labirito.com](http://www.labirito.com/projetos/ "Labirito projects")
+Para mais informaÃ§Ãµes, exemplos e dicas sobre esta biblioteca, por favor, nos visite no
+[Project Smart Menu @ labirito.com](http://www.labirito.com/projetos "Labirito projects")
 
-Muito obrigado ao Rui Viana que tem me ensinado, dado dicas, sugestões, testou e refinou esta biblioteca.
+Muito obrigado ao Rui Viana que tem me ensinado, dado dicas, sugestÃµes, testou e refinou esta biblioteca.
 
 ## How use this library?
 
@@ -55,12 +55,12 @@ IToSmartMenu_item item_1_0 = {(char*)text_1_0, 1, 0x01, 0};
 IToSmartMenu_text text_mensagem[] = "Processando";
 IToSmartMenu_item item_mensagem = {(char*)text_mensagem, 3, 0x00, 0};
 
-int acendeLED() { // funcão chamada ao mover para o item 1
+int acendeLED() { // funcÃ£o chamada ao mover para o item 1
   digitalWrite(LED_BUILTIN, HIGH);
   return 0;
 }
 
-int apagaLED() { // funcão chamada ao mover para o item 2
+int apagaLED() { // funcÃ£o chamada ao mover para o item 2
   digitalWrite(LED_BUILTIN, LOW);
   return 0;
 }
@@ -89,21 +89,21 @@ void setup() {
 }
 
 void loop() {
-  // chama as funções do menu para executar funcões durante o loop
+  // chama as funÃ§Ãµes do menu para executar funcÃµes durante o loop
   menu.onLoop(0);
 }
 
 ```
 
-## Observações
+## ObservaÃ§Ãµes
 
-Ao implementar a biblioteca no Arduino, enfrentamos os mesmos problemas que normalmente temos devido a pouquíssima memória disponível.
+Ao implementar a biblioteca no Arduino, enfrentamos os mesmos problemas que normalmente temos devido a pouquÃ­ssima memÃ³ria disponÃ­vel.
 
-Portanto, foi utilizado a biblioteca da AVR pgmspace.h para manter os textos do menú na área de memória de programa.
+Portanto, foi utilizado a biblioteca da AVR pgmspace.h para manter os textos do menÃº na Ã¡rea de memÃ³ria de programa.
 
-Porém, esta biblioteca parece ter muitos problemas, principalmente ao utilizarmos modelos de placas similares e versões diferentes da IDE.
+PorÃ©m, esta biblioteca parece ter muitos problemas, principalmente ao utilizarmos modelos de placas similares e versÃµes diferentes da IDE.
 
-Sintam-se a vontade para comentar nos informando como é sua experiencia com a biblioteca.
+Sintam-se a vontade para comentar nos informando como Ã© sua experiencia com a biblioteca.
 
 ## License
 
